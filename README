@@ -1,0 +1,129 @@
+# Sistema de Control y Registro de Estudiantes (MVC + TypeScript)
+
+> **Materia:** Laboratorio #2  
+> **Arquitectura:** Modelo - Vista - Controlador (MVC)  
+> **Lenguaje:** TypeScript  
+> **Persistencia:** LocalStorage API  
+
+---
+
+## 1. Descripción del Proyecto
+
+El **Sistema de Registro de Estudiantes** es una aplicación web diseñada para gestionar la matrícula y datos básicos de alumnos de manera organizada, modular y persistente. La solución implementa el patrón arquitectónico **Modelo-Vista-Controlador (MVC)** utilizando **TypeScript** con tipado estricto, garantizando la separación de responsabilidades, la prevención de datos duplicados y una interfaz escolar intuitiva.
+
+---
+
+## 2. Cumplimiento de Requerimientos Funcionales
+
+| Requerimiento | Descripción técnica | Estado |
+| :--- | :--- | :---: |
+| **Registro de datos** | Captura código/carnet, nombre completo y carrera mediante formulario reactivo. | Completado |
+| **Listado dinámico** | Presentación de estudiantes en tabla estructurada de estilo académico. | Completado |
+| **Búsqueda en tiempo real** | Filtrado instantáneo por coincidencia en carnet o nombre completo. | Completado |
+| **Edición de registros** | Carga de datos existentes en el formulario para su actualización sin duplicar ID. | Completado |
+| **Eliminación con confirmación** | Cuadro de diálogo de confirmación antes de remover el registro del estado y del almacenamiento. | Completado |
+| **Control de duplicados** | Validación antes del guardado que rechaza códigos de estudiante ya existentes en el sistema. | Completado |
+| **Persistencia de datos** | Sincronización continua de lectura y escritura en `localStorage`. | Completado |
+
+---
+
+## 3. Arquitectura del Software (Patrón MVC)
+
+El sistema separa estrictamente los datos, la presentación y la lógica de interacción en capas desacopladas:
+
+src/
+├── models/
+│   └── Estudiante.ts       <-- [MODELO] Datos, tipos y reglas de validación
+├── views/
+│   └── EstudianteView.ts   <-- [VISTA] DOM, renderizado de tablas y alertas
+├── controllers/
+│   └── EstudianteController.ts <-- [CONTROLADOR] Orquestador de eventos y lógica
+├── services/
+│   └── StorageService.ts   <-- [SERVICIO] Capa genérica de persistencia (localStorage)
+├── styles/
+│   └── styles.css          <-- Estilos de interfaz escolar
+└── main.ts                 <-- Punto de entrada e instanciación
+
+### Detalle de Componentes
+
+1. **Modelo (`Estudiante.ts`)**
+   - Define la interfaz `IEstudiante` para asegurar la consistencia del contrato de datos.
+   - La clase `Estudiante` encapsula las propiedades (`id`, `codigo`, `nombre`, `carrera`).
+   - Contiene el método estático de validación de negocio `Estudiante.validar(...)`, garantizando que campos vacíos o cadenas no válidas no lleguen a procesarse.
+
+2. **Vista (`EstudianteView.ts`)**
+   - Centraliza el acceso al árbol DOM (`HTMLFormElement`, `HTMLInputElement`, etc.).
+   - Se encarga exclusivamente de manipular elementos visuales: generación de filas (`<tr>`), alternancia entre modos guardar/actualizar, limpieza de entradas y render de mensajes de retroalimentación temporal.
+   - Desacopla la lógica de eventos mediante callbacks pasados como parámetros (`onEditar`, `onEliminar`).
+
+3. **Controlador (`EstudianteController.ts`)**
+   - Es el intermediario entre el Modelo y la Vista.
+   - Escucha los eventos de envío de formulario, teclas en el buscador y clicks en los botones de acción.
+   - Aplica la regla de integridad de negocio: valida que el código ingresado no exista previamente en la colección en memoria (`array.some(...)`), permitiendo únicamente la coincidencia si se trata del mismo registro durante una actualización.
+   - Notifica al servicio de almacenamiento tras cada operación mutadora.
+
+4. **Servicio (`StorageService.ts`)**
+   - Implementa una clase genérica `StorageService<T>` para desacoplar el motor de persistencia del controlador. Facilita la mantenibilidad y escalabilidad del código.
+
+---
+
+## 4. Instalación y Ejecución
+
+### Requisitos previos
+- Node.js instalado (versión 18 o superior recomendada).
+
+### Pasos de ejecución
+
+1. Instalar las dependencias del proyecto:
+   npm init -y
+   npx tsc --init --target ES6 --module commonjs
+
+   tsconfig debe quedar asi
+   {
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+    // File Layout
+    // "rootDir": "./src",
+    // "outDir": "./dist",
+
+    // Environment Settings
+    // See also https://aka.ms/tsconfig/module
+    "module": "ES6",
+    "target": "ES6",
+    "types": [],
+    // For nodejs:
+    // "lib": ["esnext"],
+    // "types": ["node"],
+    // and npm install -D @types/node
+
+    // Other Outputs
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    // Stricter Typechecking Options
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    // Style Options
+    // "noImplicitReturns": true,
+    // "noImplicitOverride": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    // "noFallthroughCasesInSwitch": true,
+    // "noPropertyAccessFromIndexSignature": true,
+
+    // Recommended Options
+    "strict": true,
+    "jsx": "react-jsx",
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+  }
+}
+
+compilar y ejecutar
+$ npx tsc -w
+npx live-server

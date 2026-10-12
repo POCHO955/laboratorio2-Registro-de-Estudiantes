@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control de Estudiantes - Laboratorio 2</title>
+  <link rel="stylesheet" href="./src/styles/styles.css">
+</head>
+<body>
+  <div class="contenedor-principal">
+    <!-- Encabezado Escolar / Universitario -->
+    <header class="header-academico">
+      <div class="header-titulos">
+        <h1>Registro De Estudiantes</h1>
+        <p>Módulo de Registro y Matrícula Académica</p>
+      </div>
+    </header>
+
+    <!-- Alertas del sistema -->
+    <div id="mensaje-feedback" class="alerta" style="display: none;"></div>
+
+    <main class="grid-layout">
+      <!-- Columna 1: Formulario estilo ficha de inscripción -->
+      <section class="ficha-escolar">
+        <div class="ficha-encabezado">
+          <h2>Ficha del Estudiante</h2>
+          <small>Complete la información solicitada</small>
+        </div>
+
+        <form id="estudiante-form">
+          <input type="hidden" id="estudiante-id">
+
+          <div class="campo">
+            <label for="codigo">Código / Carnet:</label>
+            <input type="text" id="codigo" placeholder="Ejemplo: U20261985" required autocomplete="off">
+          </div>
+
+          <div class="campo">
+            <label for="nombre">Nombre Completo:</label>
+            <input type="text" id="nombre" placeholder="Nombres y Apellidos" required autocomplete="off">
+          </div>
+
+          <div class="campo">
+            <label for="carrera">Carrera / Especialidad:</label>
+            <input type="text" id="carrera" placeholder="Ejemplo: Ing. en Desarrollo de Software" required autocomplete="off">
+          </div>
+
+          <div class="botones-form">
+            <button type="submit" id="btn-submit" class="boton btn-guardar">Guardar Registro</button>
+            <button type="button" id="btn-cancelar" class="boton btn-cancelar" style="display: none;">Cancelar</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Columna 2: Tabla estilo registro de notas o expediente -->
+      <section class="panel-lista">
+        <div class="barra-herramientas">
+          <h2>Expediente General</h2>
+          <div class="buscador-caja">
+            <input type="text" id="buscar" placeholder="Filtrar por código o nombre...">
+          </div>
+        </div>
+
+        <div class="tabla-scroll">
+          <table class="tabla-academica">
+            <thead>
+              <tr>
+                <th style="width: 15%;">Carnet</th>
+                <th style="width: 40%;">Estudiante</th>
+                <th style="width: 30%;">Carrera</th>
+                <th style="width: 15%; text-align: center;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-estudiantes-body">
+              <!-- Renderizado desde EstudianteView.ts -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="./src/main.ts"></script>
+</body>
+</html>
