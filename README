@@ -71,59 +71,72 @@ src/
 
 ### Requisitos previos
 - Node.js instalado (versión 18 o superior recomendada).
+- npm disponible junto con Node.
 
-### Pasos de ejecución
+### 4.1 Instalar dependencias
+Desde la carpeta del proyecto:
 
-1. Instalar las dependencias del proyecto:
-   npm init -y
-   npx tsc --init --target ES6 --module commonjs
+```bash
+npm install
+```
 
-   tsconfig debe quedar asi
-   {
-  // Visit https://aka.ms/tsconfig to read more about this file
+### 4.2 Compilar TypeScript a JavaScript
+Este proyecto usa TypeScript y genera archivos `.js` en el mismo directorio del archivo `.ts`.
+
+Ejecute esta línea para compilar una sola vez:
+
+```bash
+npx tsc
+```
+
+O en modo observador para recompilar automáticamente al guardar cambios:
+
+```bash
+npx tsc -w
+```
+
+> Importante: al compilar, TypeScript crea archivos `.js` junto a cada `.ts`, por ejemplo:
+> - `main.ts` -> `main.js`
+> - `src/controllers/EstudianteController.ts` -> `src/controllers/EstudianteController.js`
+>
+> Por eso la página debe cargar `./main.js` desde el archivo `index.html`.
+
+### 4.3 Ejecutar la aplicación
+La forma más simple es usar un servidor local:
+
+```bash
+npx live-server
+```
+
+Esto abrirá la aplicación en el navegador y cargará la interfaz principal desde `index.html`.
+
+### 4.4 Configuración recomendada de TypeScript
+El proyecto ya cuenta con un `tsconfig.json` compatible. Si necesitas recrearlo manualmente, puede quedar así:
+
+```json
+{
   "compilerOptions": {
-    // File Layout
-    // "rootDir": "./src",
-    // "outDir": "./dist",
-
-    // Environment Settings
-    // See also https://aka.ms/tsconfig/module
     "module": "ES6",
     "target": "ES6",
-    "types": [],
-    // For nodejs:
-    // "lib": ["esnext"],
-    // "types": ["node"],
-    // and npm install -D @types/node
-
-    // Other Outputs
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
-
-    // Stricter Typechecking Options
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-
-    // Style Options
-    // "noImplicitReturns": true,
-    // "noImplicitOverride": true,
-    // "noUnusedLocals": true,
-    // "noUnusedParameters": true,
-    // "noFallthroughCasesInSwitch": true,
-    // "noPropertyAccessFromIndexSignature": true,
-
-    // Recommended Options
     "strict": true,
     "jsx": "react-jsx",
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
-    "skipLibCheck": true,
+    "skipLibCheck": true
   }
 }
+```
 
-compilar y ejecutar
-$ npx tsc -w
-npx live-server
+### 4.5 Nota importante sobre el arranque
+El archivo HTML cargará el script compilado en JavaScript desde la raíz del proyecto:
+
+```html
+<script type="module" src="./main.js"></script>
+```
+
+Esto es necesario porque el proyecto se compila a JavaScript y no se ejecuta directamente desde el archivo `.ts` del navegador.
