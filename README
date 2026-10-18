@@ -1,6 +1,6 @@
 # Sistema de Control y Registro de Estudiantes (MVC + TypeScript)
 
-> **Materia:** Laboratorio #2  
+>> **Entrega Parcial 2:** Actualización y nuevas funcionalidades MVC con TypeScript.
 > **Arquitectura:** Modelo - Vista - Controlador (MVC)  
 > **Lenguaje:** TypeScript  
 > **Persistencia:** LocalStorage API  
