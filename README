@@ -1,0 +1,190 @@
+# Sistema de Control y Registro de Estudiantes (MVC + TypeScript)
+
+> **Materia:** Laboratorio #2  
+> **Arquitectura:** Modelo - Vista - Controlador (MVC)  
+> **Lenguaje:** TypeScript  
+> **Persistencia:** LocalStorage API  
+> **Funcionalidad adicional:** exportación CSV y credenciales QR para estudiantes  
+
+---
+
+## 1. Descripción general
+
+El proyecto es una aplicación web de gestión académica para registrar, consultar, editar y eliminar estudiantes de una institución educativa. La solución sigue el patrón MVC para separar claramente la lógica del negocio, la representación visual y el almacenamiento persistente.
+
+Además de las operaciones básicas del registro, la versión actual incluye:
+
+- validación estricta de campos
+- filtro por carrera
+- ordenamiento por nombre o código
+- estadísticas por carrera
+- exportación de datos a CSV
+- generación de credenciales con código QR
+- persistencia automática en localStorage
+
+---
+
+## 2. Requerimientos funcionales actuales
+
+| Requerimiento | Descripción | Estado |
+| :--- | :--- | :---: |
+| Registro de estudiantes | Captura de código, nombre, email, carrera y año de ingreso. | Completado |
+| Validación de datos | Revisa campos vacíos, formato de correo, longitud del carnet y rango de año. | Completado |
+| Control de duplicados | Evita repetir código y correo en registros distintos. | Completado |
+| Listado dinámico | Muestra los estudiantes en tabla con datos organizados. | Completado |
+| Búsqueda en tiempo real | Busca por nombre, correo o código. | Completado |
+| Filtro por carrera | Muestra únicamente los estudiantes de una carrera específica. | Completado |
+| Ordenamiento | Ordena por nombre o código. | Completado |
+| Edición | Carga los datos de un estudiante en el formulario para actualizarlo. | Completado |
+| Eliminación con confirmación | Solicita confirmación antes de borrar un registro. | Completado |
+| Estadísticas académicas | Muestra un contador general y por carrera. | Completado |
+| Exportación CSV | Genera un archivo .csv con los datos registrados. | Completado |
+| Credencial QR | Muestra la información del estudiante en un modal con QR. | Completado |
+| Persistencia local | Guarda y recupera los datos con localStorage. | Completado |
+
+---
+
+## 3. Arquitectura del software (MVC)
+
+El proyecto está organizado en capas bien definidas:
+
+```text
+src/
+├── models/
+│   └── Estudiante.ts            <-- Modelo: estructura, validaciones y lógica de negocio
+├── views/
+│   └── EstudianteView.ts        <-- Vista: DOM, render tabla, alertas, modal QR
+├── controllers/
+│   └── EstudianteController.ts  <-- Controlador: orquesta eventos y flujo de la app
+├── services/
+│   └── StorageService.ts        <-- Servicio de almacenamiento persistente
+├── styles/
+│   └── styles.css              <-- Estilos del sistema escolar
+├── main.ts                     <-- Punto de entrada de la aplicación
+├── main.js                     <-- Salida compilada por TypeScript
+├── index.html                  <-- Interfaz principal del sistema
+└── tsconfig.json               <-- Configuración del compilador
+```
+
+### Componentes principales
+
+1. Modelo (`Estudiante.ts`)
+   - Define la interfaz `IEstudiante`.
+   - Implementa la clase `EstudianteModel` con gestión de registros, validaciones y filtros.
+   - Valida campos obligatorios, email válido, año válido y duplicados.
+   - Expone métodos para agregar, actualizar, eliminar, ordenar y contar por carrera.
+
+2. Vista (`EstudianteView.ts`)
+   - Centraliza todos los elementos del DOM.
+   - Renderiza la tabla de estudiantes, los contadores, mensajes de alerta y el modal de credencial QR.
+   - Maneja la carga del formulario para edición y el reset para nuevo registro.
+
+3. Controlador (`EstudianteController.ts`)
+   - Recibe eventos del formulario y de la UI.
+   - Valida la información antes de guardar.
+   - Actualiza el modelo, persiste los datos y refresca la vista.
+   - Ejecuta exportación CSV y apertura del modal de credencial QR.
+
+4. Servicio de almacenamiento (`StorageService.ts`)
+   - Encapsula la lectura y escritura de datos en localStorage.
+   - Facilita la persistencia sin acoplar el controlador al navegador.
+
+---
+
+## 4. Flujo funcional del sistema
+
+1. El usuario llena el formulario con los datos del estudiante.
+2. El controlador valida el formato y la unicidad del registro.
+3. Si todo es correcto, se guarda el estudiante en memoria.
+4. El sistema persiste la información en localStorage.
+5. La vista actualiza la tabla, los filtros y los contadores.
+6. El usuario puede editar, eliminar, buscar o exportar los datos.
+7. La credencial QR permite visualizar la identidad académica del estudiante.
+
+---
+
+## 5. Requisitos previos
+
+- Node.js 18 o superior
+- npm instalado
+- navegador moderno (Chrome, Edge, Firefox)
+
+---
+
+## 6. Instalación y ejecución
+
+### 6.1 Instalar dependencias
+
+```bash
+npm install
+```
+
+### 6.2 Compilar TypeScript
+
+Compilar una sola vez:
+
+```bash
+npm run build
+```
+
+O con compilación continua:
+
+```bash
+npx tsc -w
+```
+
+> El proyecto genera archivos `.js` junto a cada `.ts` para que el navegador pueda cargar la aplicación desde `index.html`.
+
+### 6.3 Ejecutar la aplicación
+
+Opción recomendada:
+
+```bash
+npm start
+```
+
+También puede ejecutarse directamente con:
+
+```bash
+npx live-server
+```
+
+Esto levantará un servidor local y abrirá la interfaz principal desde `index.html`.
+
+### 6.4 Validación del proyecto
+
+Para comprobar que la compilación TypeScript es correcta:
+
+```bash
+npm run test
+```
+
+Este comando ejecuta `tsc --noEmit` y verifica que no haya errores de compilación.
+
+---
+
+## 7. Estructura de archivos importante
+
+```text
+index.html
+main.ts
+main.js
+package.json
+tsconfig.json
+src/
+├── controllers/
+│   ├── EstudianteController.ts
+│   └── EstudianteController.js
+├── models/
+│   ├── Estudiante.ts
+│   └── Estudiante.js
+├── services/
+│   ├── StorageService.ts
+│   └── StorageService.js
+├── styles/
+│   └── styles.css
+├── views/
+│   ├── EstudianteView.ts
+│   └── EstudianteView.js
+└── ...
+```

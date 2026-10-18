@@ -1,0 +1,19 @@
+{
+  "name": "registro-de-estudiantes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "live-server",
+    "test": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "typescript": "^7.0.2"
+  }
+}

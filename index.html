@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Control Escolar - Parcial 2</title>
+  <link rel="stylesheet" href="./src/styles/styles.css">
+</head>
+<body>
+  <div class="contenedor-principal">
+    <header class="header-academico">
+      <div class="header-logo">🎓</div>
+      <div class="header-titulos">
+        <h1>Sistema de Registro de Estudiantes</h1>
+        <p>Módulo Académico Avanzado</p>
+      </div>
+    </header>
+
+    <!-- Notificación temporal de alerta -->
+    <div id="mensaje-feedback" class="alerta" style="display: none;"></div>
+
+    <!-- RF-08: Sección de estadísticas y contadores -->
+    <section class="panel-estadisticas">
+      <h3>Resumen Académico por Carrera</h3>
+      <div id="contador-carreras" class="grid-contadores">
+        <!-- Generado dinámicamente -->
+      </div>
+    </section>
+
+    <main class="grid-layout">
+      <!-- Columna Formulario -->
+      <section class="ficha-escolar">
+        <div class="ficha-encabezado">
+          <h2>Expediente del Alumno</h2>
+          <small>Registro y actualización de datos</small>
+        </div>
+
+        <form id="estudiante-form">
+          <input type="hidden" id="estudiante-id">
+
+          <div class="campo">
+            <label for="codigo">Código / Carnet:</label>
+            <input type="text" id="codigo" placeholder="Ej. U20262338" required autocomplete="off">
+          </div>
+
+          <div class="campo">
+            <label for="nombre">Nombre Completo:</label>
+            <input type="text" id="nombre" placeholder="Nombres y Apellidos" required autocomplete="off">
+          </div>
+
+          <div class="campo">
+            <label for="email">Correo Institucional:</label>
+            <input type="email" id="email" placeholder="estudiante@universidad.edu.sv" required autocomplete="off">
+          </div>
+
+          <div class="campo">
+            <label for="carrera">Carrera:</label>
+            <select id="carrera" required>
+              <option value="" disabled selected>Seleccione una carrera...</option>
+              <option value="Ingeniería en Desarrollo de Software">Ingeniería en Desarrollo de Software</option>
+              <option value="Ingeniería en Sistemas y Redes">Ingeniería en Sistemas y Redes</option>
+              <option value="Técnico en Computación">Técnico en Computación</option>
+              <option value="Licenciatura en Administración">Licenciatura en Administración</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="anioIngreso">Año de Ingreso:</label>
+            <input type="number" id="anioIngreso" placeholder="Ej. 2024" min="1980" max="2026" required>
+          </div>
+
+          <div class="botones-form">
+            <button type="submit" id="btn-submit" class="boton btn-guardar">Guardar Estudiante</button>
+            <button type="button" id="btn-cancelar" class="boton btn-cancelar" style="display: none;">Cancelar</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Columna Tabla y Filtros -->
+      <section class="panel-lista">
+        <div class="barra-herramientas">
+          <div class="filtros-superiores">
+            <input type="text" id="buscar" placeholder="🔍 Buscar por nombre, carnet o email..." class="input-control">
+
+            <!-- RF-04: Filtro por Carrera -->
+            <select id="filtro-carrera" class="input-control">
+              <option value="">Todas las Carreras</option>
+              <option value="Ingeniería en Desarrollo de Software">Ing. en Desarrollo de Software</option>
+              <option value="Ingeniería en Sistemas y Redes">Ing. en Sistemas y Redes</option>
+              <option value="Técnico en Computación">Técnico en Computación</option>
+              <option value="Licenciatura en Administración">Lic. en Administración</option>
+            </select>
+
+            <!-- RF-05: Ordenamiento -->
+            <select id="orden-criterio" class="input-control">
+              <option value="nombre">Ordenar por: Nombre (A-Z)</option>
+              <option value="codigo">Ordenar por: Código</option>
+            </select>
+
+            <!-- RF-09: Exportar a CSV -->
+            <button id="btn-exportar" class="boton btn-exportar" title="Descargar como CSV">📥 Exportar CSV</button>
+          </div>
+        </div>
+
+        <div class="tabla-scroll">
+          <table class="tabla-academica">
+            <thead>
+              <tr>
+                <th>Carnet</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Carrera</th>
+                <th>Ingreso</th>
+                <th style="text-align: center;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-estudiantes-body">
+              <!-- Renderizado desde EstudianteView.ts -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal Reto Adicional: Credencial Estudiantil con QR -->
+  <div id="modal-qr" class="modal-fondo" style="display: none;">
+    <div class="modal-tarjeta">
+      <div class="tarjeta-credencial">
+        <div class="credencial-header">UNIVERSIDAD NACIONAL</div>
+        <div class="credencial-body">
+          <img id="qr-image" alt="Código QR del estudiante" src="">
+          <h4 id="qr-nombre">Nombre Estudiante</h4>
+          <p>Carnet: <span id="qr-carnet"></span></p>
+          <p>Carrera: <span id="qr-carrera"></span></p>
+        </div>
+      </div>
+      <button id="btn-cerrar-qr" class="boton btn-cancelar" style="width: 100%; margin-top: 10px;">Cerrar Credencial</button>
+    </div>
+  </div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
